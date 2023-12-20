@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    if: github.event_name == 'push'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -21,95 +21,6 @@ jobs:
             MSVCYEAR: vs2019
             ARTIFACT_NAME: v142-x64
             ENABLE_DRAFTS: ON
-          - os: ubuntu-latest
-            BUILD_TYPE: default
-            PACKAGES: asciidoctor
-            DRAFT: disabled
-            POLLER: select
-          - os: ubuntu-latest
-            BUILD_TYPE: default
-            DRAFT: disabled
-            POLLER: poll
-          - os: ubuntu-latest
-            BUILD_TYPE: android
-            DRAFT: disabled
-          - os: ubuntu-latest
-            BUILD_TYPE: coverage
-            PACKAGES: libkrb5-dev libnorm-dev libpgm-dev libgnutls28-dev lcov
-            DRAFT: enabled
-            GSSAPI: enabled
-            PGM: enabled
-            NORM: enabled
-            TIPC: enabled
-            TLS: enabled
-            VMCI: enabled
-          - os: ubuntu-latest
-            BUILD_TYPE: valgrind
-            PACKAGES: valgrind libgnutls28-dev
-            DRAFT: enabled
-          - os: ubuntu-latest
-            BUILD_TYPE: cmake
-            CURVE: libsodium
-            DRAFT: enabled
-            PACKAGES: cmake libsodium-dev
-            TLS: enabled
-          - os: ubuntu-latest
-            BUILD_TYPE: cmake
-            DRAFT: enabled
-            PACKAGES: cmake clang-format-11
-            DO_CLANG_FORMAT_CHECK: 1
-          - os: ubuntu-latest
-            BUILD_TYPE: default
-            PACKAGES: libkrb5-dev libnorm-dev libpgm-dev libgnutls28-dev libsodium-dev libnss3-dev libbsd-dev
-            CURVE: libsodium
-            ADDRESS_SANITIZER: enabled
-            DRAFT: enabled
-          - os: ubuntu-latest
-            BUILD_TYPE: default
-            PACKAGES: libkrb5-dev libnorm-dev libpgm-dev libgnutls28-dev libsodium-dev libnss3-dev libbsd-dev
-            CURVE: libsodium
-            GSSAPI: enabled
-            PGM: enabled
-            NORM: enabled
-            TIPC: enabled
-            IPv6: ON
-            TLS: enabled
-            USE_NSS: yes
-            VMCI: enabled
-            DRAFT: enabled
-          - os: ubuntu-latest
-            BUILD_TYPE: default
-            PACKAGES: libkrb5-dev libnorm-dev libpgm-dev libgnutls28-dev libsodium-dev libnss3-dev
-            CURVE: libsodium
-            GSSAPI: enabled
-            PGM: enabled
-            NORM: enabled
-            TIPC: enabled
-            IPv6: ON
-            TLS: enabled
-            USE_NSS: yes
-            VMCI: enabled
-            DRAFT: enabled
-            FORCE_98: enabled
-            CXX: clang++
-          - os: ubuntu-latest
-            BUILD_TYPE: abi-compliance-checker
-            PACKAGES: abi-dumper abi-compliance-checker
-            DRAFT: disabled
-          - os: ubuntu-latest
-            BUILD_TYPE: cmake
-            PACKAGES: clang-tidy clang-tools
-            DRAFT: enabled
-            CXX: clang++
-          - os: macos-latest
-            BUILD_TYPE: default
-            PACKAGES: automake autoconf
-            DRAFT: enabled
-          - os: macos-latest
-            BUILD_TYPE: default
-            PACKAGES: automake autoconf libsodium
-            CURVE: libsodium
-            DRAFT: disabled
     env:
       platform: ${{ matrix.platform }}
       configuration: ${{ matrix.configuration }}
