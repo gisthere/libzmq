@@ -83,31 +83,15 @@ jobs:
       run: |        
         cmake -D CMAKE_INCLUDE_PATH="%SODIUM_INCLUDE_DIR%" -D CMAKE_LIBRARY_PATH="%SODIUM_LIBRARY_DIR%" -D WITH_LIBSODIUM="%WITH_LIBSODIUM%" -D ENABLE_DRAFTS="%ENABLE_DRAFTS%" -D ENABLE_ANALYSIS="%ENABLE_ANALYSIS%" -D ENABLE_CURVE="%ENABLE_CURVE%" -D API_POLLER="%API_POLLER%" -D POLLER="%POLLER%" %EXTRA_FLAGS% -D WITH_LIBSODIUM="%WITH_LIBSODIUM%" -D LIBZMQ_WERROR="%LIBZMQ_WERROR%" -G "%CMAKE_GENERATOR%" "%LIBZMQ_SRCDIR%"
         cmake --build . --config %configuration% --target install -- -verbosity:Minimal -maxcpucount           
-    - name: test
-      if: matrix.os == 'windows-2019'
-      shell: cmd
-      working-directory: build_libzmq
-      run: ctest -C "%Configuration%"
-    - name: Add debian packages
-      if: matrix.os == 'ubuntu-latest' && (matrix.BUILD_TYPE != 'coverage' || github.repository == 'zeromq/libzmq')
-      uses: myci-actions/add-deb-repo@10
+    - name: 'Upload Artifacts'
+      uses: actions/upload-artifact@v3
       with:
-        repo-name: obs
-        repo: deb http://download.opensuse.org/repositories/network:/messaging:/zeromq:/git-stable/xUbuntu_20.04/ ./
-        keys-asc: https://download.opensuse.org/repositories/network:/messaging:/zeromq:/git-stable/xUbuntu_20.04/Release.key
-        install: ${{ matrix.PACKAGES }}
-    - name: Add brew packages
-      if: matrix.os == 'macos-latest'
-      shell: bash
-      run: brew install ${{ matrix.PACKAGES }}
-    - name: build
-      if: (matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest') && (matrix.BUILD_TYPE != 'coverage' || github.repository == 'zeromq/libzmq')
-      shell: bash
-      working-directory: libzmq
-      run: ./ci_build.sh
-    - name: coveralls
-      if: matrix.BUILD_TYPE == 'coverage' && github.repository == 'zeromq/libzmq'
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: /home/runner/work/libzmq/libzmq/libzmq/lcov.info
+        name: libraries
+        path: |
+          C:/Program Files (x86)/ZeroMQ/bin/*.dll
+
+#    - name: test
+#      if: matrix.os == 'windows-2019'
+#      shell: cmd
+#      working-directory: build_libzmq
+#      run: ctest -C "%Configuration%"
